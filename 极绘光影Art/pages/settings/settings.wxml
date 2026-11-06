@@ -1,0 +1,231 @@
+<!--pages/settings/settings.wxml-->
+<view class="settings-container">
+  <!-- 顶部白色信息栏 -->
+  <view class="top-bar">
+    <view class="top-bar-content">
+      <text class="top-bar-title">设置</text>
+    </view>
+  </view>
+  <!-- 隐私设置页面 -->
+  <view wx:if="{{settingType === 'privacy'}}">
+    <view class="settings-section">
+      <text class="section-title">隐私设置</text>
+      <view class="settings-list">
+        <view class="setting-item">
+          <view class="setting-info">
+            <text class="setting-name">公开个人资料</text>
+            <text class="setting-desc">允许其他用户查看你的个人资料</text>
+          </view>
+          <t-switch 
+            checked="{{privacySettings.showProfile}}"
+            bind:change="onPrivacyToggle"
+            data-key="showProfile"
+          ></t-switch>
+        </view>
+        
+        <view class="setting-item">
+          <view class="setting-info">
+            <text class="setting-name">允许评论</text>
+            <text class="setting-desc">允许其他用户评论你的作品</text>
+          </view>
+          <t-switch 
+            checked="{{privacySettings.allowComments}}"
+            bind:change="onPrivacyToggle"
+            data-key="allowComments"
+          ></t-switch>
+        </view>
+        
+        <view class="setting-item">
+          <view class="setting-info">
+            <text class="setting-name">允许关注</text>
+            <text class="setting-desc">允许其他用户关注你</text>
+          </view>
+          <t-switch 
+            checked="{{privacySettings.allowFollows}}"
+            bind:change="onPrivacyToggle"
+            data-key="allowFollows"
+          ></t-switch>
+        </view>
+        
+        <view class="setting-item">
+          <view class="setting-info">
+            <text class="setting-name">公开作品</text>
+            <text class="setting-desc">将作品展示在公共画廊中</text>
+          </view>
+          <t-switch 
+            checked="{{privacySettings.showArtworks}}"
+            bind:change="onPrivacyToggle"
+            data-key="showArtworks"
+          ></t-switch>
+        </view>
+      </view>
+    </view>
+
+    <view class="settings-section">
+      <text class="section-title">数据管理</text>
+      <view class="settings-list">
+        <view class="setting-item" bind:tap="onClearCache">
+          <view class="setting-info">
+            <text class="setting-name">清除缓存</text>
+            <text class="setting-desc">清除应用缓存数据</text>
+          </view>
+          <t-icon name="chevron-right" size="24rpx" color="#CCCCCC"></t-icon>
+        </view>
+        
+        <view class="setting-item" bind:tap="onDeleteAccount">
+          <view class="setting-info">
+            <text class="setting-name">注销账户</text>
+            <text class="setting-desc">永久删除账户和所有数据</text>
+          </view>
+          <t-icon name="chevron-right" size="24rpx" color="#CCCCCC"></t-icon>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 关于我们页面 -->
+  <view wx:if="{{settingType === 'about'}}">
+    <view class="about-header">
+      <view class="app-logo">
+        <image src="https://youke1.picui.cn/s1/2025/09/23/68d26ea689c41.png" mode="aspectFit" style="width: 160rpx; height: 160rpx; border-radius: 32rpx;"></image>
+      </view>
+      <text class="app-name">极绘光影Art</text>
+      <text class="app-version">版本 {{aboutInfo.version}}</text>
+      <text class="app-build">MADE BY XUANANI 20250923</text>
+    </view>
+
+    <view class="settings-section">
+      <text class="section-title">应用信息</text>
+      <view class="settings-list">
+        <view class="setting-item">
+          <view class="setting-info">
+            <text class="setting-name">开发者</text>
+            <text class="setting-desc">{{aboutInfo.developer}}（个人开发者）</text>
+          </view>
+        </view>
+        
+        <view class="setting-item">
+          <view class="setting-info">
+            <text class="setting-name">开源协议</text>
+            <text class="setting-desc">{{aboutInfo.license}} · {{aboutInfo.copyright}}</text>
+          </view>
+        </view>
+        
+        <view class="setting-item" bind:tap="onOpenRepo">
+          <view class="setting-info">
+            <text class="setting-name">项目主页</text>
+            <text class="setting-desc">github.com/xuanani/jihui-guangying-art</text>
+          </view>
+          <t-icon name="chevron-right" size="24rpx" color="#CCCCCC"></t-icon>
+        </view>
+        
+        <view class="setting-item" bind:tap="onContactSupport">
+          <view class="setting-info">
+            <text class="setting-name">联系我们</text>
+            <text class="setting-desc">{{aboutInfo.email}}</text>
+          </view>
+          <t-icon name="chevron-right" size="24rpx" color="#CCCCCC"></t-icon>
+        </view>
+      </view>
+    </view>
+
+    <view class="settings-section">
+      <text class="section-title">功能操作</text>
+      <view class="settings-list">
+        <view class="setting-item" bind:tap="onCheckUpdate">
+          <view class="setting-info">
+            <text class="setting-name">检查更新</text>
+            <text class="setting-desc">查看是否有新版本</text>
+          </view>
+          <t-icon name="chevron-right" size="24rpx" color="#CCCCCC"></t-icon>
+        </view>
+        
+        <view class="setting-item" bind:tap="onFeedback">
+          <view class="setting-info">
+            <text class="setting-name">意见反馈</text>
+            <text class="setting-desc">告诉我们你的想法</text>
+          </view>
+          <t-icon name="chevron-right" size="24rpx" color="#CCCCCC"></t-icon>
+        </view>
+      </view>
+    </view>
+
+    <view class="settings-section">
+      <text class="section-title">法律条款</text>
+      <view class="settings-list">
+        <view class="setting-item" bind:tap="onUserAgreement">
+          <view class="setting-info">
+            <text class="setting-name">用户协议</text>
+            <text class="setting-desc">查看用户使用协议</text>
+          </view>
+          <t-icon name="chevron-right" size="24rpx" color="#CCCCCC"></t-icon>
+        </view>
+        
+        <view class="setting-item" bind:tap="onPrivacyPolicy">
+          <view class="setting-info">
+            <text class="setting-name">隐私政策</text>
+            <text class="setting-desc">了解我们如何保护你的隐私</text>
+          </view>
+          <t-icon name="chevron-right" size="24rpx" color="#CCCCCC"></t-icon>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 意见反馈弹窗 -->
+  <t-popup
+    visible="{{showFeedback}}"
+    placement="center"
+    bind:visible-change="onCancelFeedback"
+  >
+    <view class="feedback-popup">
+      <view class="feedback-header">
+        <text class="feedback-title">意见反馈</text>
+        <t-icon name="close" size="32rpx" color="#999999" bind:tap="onCancelFeedback"></t-icon>
+      </view>
+      
+      <view class="feedback-content">
+        <t-textarea
+          class="feedback-input"
+          value="{{feedback.content}}"
+          placeholder="请描述你遇到的问题或建议..."
+          maxlength="500"
+          bind:change="onFeedbackInput"
+          autosize="{{true}}"
+        ></t-textarea>
+        
+        <t-input
+          class="contact-input"
+          value="{{feedback.contact}}"
+          placeholder="联系方式（可选）"
+          bind:change="onContactInput"
+        ></t-input>
+      </view>
+      
+      <view class="feedback-actions">
+        <t-button
+          theme="default"
+          size="large"
+          bind:tap="onCancelFeedback"
+        >
+          取消
+        </t-button>
+        <t-button
+          theme="primary"
+          size="large"
+          bind:tap="onSubmitFeedback"
+          disabled="{{!feedback.content.trim()}}"
+        >
+          提交
+        </t-button>
+      </view>
+    </view>
+  </t-popup>
+</view>
+
+<!-- 自定义组件引用 -->
+<view class="custom-components">
+  <t-icon name="logo" size="24rpx" color="#0052D9"></t-icon>
+  <t-icon name="chevron-right" size="24rpx" color="#CCCCCC"></t-icon>
+  <t-icon name="close" size="24rpx" color="#999999"></t-icon>
+</view>

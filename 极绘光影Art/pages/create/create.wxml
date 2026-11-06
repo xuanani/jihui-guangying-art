@@ -1,0 +1,128 @@
+<!--pages/create/create.wxml-->
+<view class="create-container">
+  <!-- 顶部白色信息栏 -->
+  <view class="top-bar">
+    <view class="top-bar-content">
+      <text class="top-bar-title">AI图片生成</text>
+    </view>
+  </view>
+
+  <!-- 提示词输入区域 -->
+  <view class="input-section">
+    <view class="section-header">
+      <text class="section-title">描述你想要的内容</text>
+      <view class="clear-btn" bindtap="onClear" wx:if="{{prompt || negativePrompt}}">
+        <t-icon name="close" size="20rpx" color="#999999"></t-icon>
+      </view>
+    </view>
+    
+    <view class="input-wrapper">
+      <t-textarea
+        class="prompt-input"
+        value="{{prompt}}"
+        placeholder="试试描述：一只可爱的小猫在钓鱼"
+        maxlength="500"
+        bind:change="onPromptInput"
+        autosize="{{true}}"
+      ></t-textarea>
+    </view>
+    
+    <!-- 常用风格标签 -->
+    <view class="tags-section">
+      <text class="tags-title">常用风格标签</text>
+      <view class="tags-container">
+        <view
+          wx:for="{{availableTags}}"
+          wx:key="id"
+          class="tag-item {{item.selected ? 'selected' : ''}}"
+          bind:tap="onTagSelect"
+          data-tag="{{item}}"
+        >
+          {{item.name}}
+        </view>
+      </view>
+    </view>
+    
+    <!-- 负面提示词 -->
+    <view class="negative-section">
+      <text class="negative-title">不想要的内容（可选）</text>
+      <view class="input-wrapper">
+        <t-input
+          class="negative-input"
+          value="{{negativePrompt}}"
+          placeholder="例如：不要文字、不要模糊、不要水印"
+          bind:change="onNegativePromptInput"
+        ></t-input>
+      </view>
+    </view>
+  </view>
+
+  <!-- 生成按钮 -->
+  <view class="generate-section">
+    <view class="generate-btn {{!prompt || generating ? 'disabled' : ''}}" bind:tap="generateImage">
+      <t-icon name="add" size="28rpx" color="#ffffff" wx:if="{{!generating}}"></t-icon>
+      <text class="btn-text">{{generating ? '生成中...' : '生成图片'}}</text>
+    </view>
+  </view>
+
+  <!-- 生成进度 -->
+  <view class="progress-section" wx:if="{{generating}}">
+    <view class="progress-header">
+      <text class="progress-title">AI正在创作中...</text>
+      <text class="progress-text">预计需要30-60秒</text>
+    </view>
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{generationProgress}}%"></view>
+    </view>
+    <view class="progress-percent">{{generationProgress}}%</view>
+  </view>
+
+  <!-- 生成结果 -->
+  <view class="result-section" wx:if="{{showResult && generatedImage}}">
+    <view class="result-header">
+      <text class="result-title">生成结果</text>
+    </view>
+    
+    <view class="image-container">
+      <t-image
+        class="result-image"
+        src="{{generatedImage}}"
+        mode="widthFix"
+        shape="round"
+        radius="16rpx"
+        loading="lazy"
+      ></t-image>
+    </view>
+    
+    <!-- 操作按钮 -->
+    <view class="result-actions">
+      <view class="regenerate-btn" bindtap="onRegenerate">
+        <t-icon name="refresh" size="24rpx" color="#333333"></t-icon>
+        <text class="btn-text">重新生成</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 灵感示例 -->
+  <view class="inspiration-section">
+    <text class="inspiration-title">灵感示例</text>
+    <view class="examples-grid">
+      <view 
+        class="example-item"
+        wx:for="{{inspirationExamples}}"
+        wx:key="title"
+        bindtap="onViewExample"
+        data-example="{{item}}"
+      >
+        <t-image
+          class="example-image"
+          src="{{item.image}}"
+          mode="aspectFill"
+          shape="round"
+          radius="12rpx"
+        ></t-image>
+        <text class="example-title">{{item.title}}</text>
+      </view>
+    </view>
+  </view>
+</view>

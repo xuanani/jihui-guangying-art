@@ -1,0 +1,21 @@
+# 密钥与本地环境变量（.env 曾被误提交过真实 Key，务必保持在忽略列表内）
+.env
+.env.*
+!.env.example
+
+# 依赖目录
+node_modules/
+
+# 微信开发者工具本地私有配置（含个人项目名与基础库版本，不参与协作）
+project.private.config.json
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 日志
+*.log
+npm-debug.log*
+yarn-error.log*

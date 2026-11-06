@@ -1,0 +1,163 @@
+<!--pages/my-gallery/my-gallery.wxml-->
+<view class="gallery-container">
+  <!-- 顶部白色信息栏 -->
+  <view class="top-bar">
+    <view class="top-bar-content">
+      <text class="top-bar-title">我的画廊</text>
+    </view>
+  </view>
+  <!-- 头部操作栏 -->
+  <view class="header-actions">
+    <view class="filter-tabs">
+      <view 
+        class="filter-tab {{filterType === 'all' ? 'active' : ''}}"
+        bind:tap="onFilterChange"
+        data-type="all"
+      >
+        全部
+      </view>
+      <view 
+        class="filter-tab {{filterType === 'public' ? 'active' : ''}}"
+        bind:tap="onFilterChange"
+        data-type="public"
+      >
+        公开
+      </view>
+      <view 
+        class="filter-tab {{filterType === 'private' ? 'active' : ''}}"
+        bind:tap="onFilterChange"
+        data-type="private"
+      >
+        私密
+      </view>
+    </view>
+    
+    <view class="header-buttons">
+      <t-button
+        theme="default"
+        size="small"
+        variant="outline"
+        bind:tap="onBatchOperation"
+      >
+        批量操作
+      </t-button>
+      <t-button
+        theme="primary"
+        size="small"
+        bind:tap="onCreateArtwork"
+      >
+        创建作品
+      </t-button>
+    </view>
+  </view>
+
+  <!-- 作品网格 -->
+  <scroll-view 
+    class="artworks-grid" 
+    scroll-y="{{true}}"
+    refresher-enabled="{{true}}"
+    refresher-triggered="{{refreshing}}"
+    bindrefresherrefresh="onPullDownRefresh"
+    bindscrolltolower="onReachBottom"
+  >
+    <view 
+      class="artwork-item"
+      wx:for="{{artworks}}"
+      wx:key="id"
+      bind:tap="onViewArtwork"
+      data-id="{{item.id}}"
+    >
+      <!-- 作品图片 -->
+      <view class="artwork-image-container">
+        <t-image
+          class="artwork-image"
+          src="{{item.image}}"
+          mode="aspectFill"
+          shape="round"
+          radius="12rpx"
+          loading="lazy"
+        ></t-image>
+        
+        <!-- 作品状态标签 -->
+        <view class="status-tag {{item.isPublic ? 'public' : 'private'}}">
+          <t-icon 
+            name="{{item.isPublic ? 'eye' : 'eye-closed'}}" 
+            size="20rpx" 
+            color="#ffffff"
+          ></t-icon>
+          <text class="status-text">{{item.isPublic ? '公开' : '私密'}}</text>
+        </view>
+        
+        <!-- 操作按钮 -->
+        <view class="artwork-actions" catchtap="true">
+          <view 
+            class="action-btn"
+            bind:tap="onTogglePublic"
+            data-id="{{item.id}}"
+          >
+            <t-icon 
+              name="{{item.isPublic ? 'eye-closed' : 'eye'}}" 
+              size="24rpx" 
+              color="#ffffff"
+            ></t-icon>
+          </view>
+          <view 
+            class="action-btn"
+            bind:tap="onShareArtwork"
+            data-id="{{item.id}}"
+          >
+            <t-icon name="share" size="24rpx" color="#ffffff"></t-icon>
+          </view>
+          <view 
+            class="action-btn delete"
+            bind:tap="onDeleteArtwork"
+            data-id="{{item.id}}"
+          >
+            <t-icon name="delete" size="24rpx" color="#ffffff"></t-icon>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 作品信息 -->
+      <view class="artwork-info">
+        <text class="artwork-prompt">{{item.prompt}}</text>
+        <view class="artwork-stats">
+          <view class="stat-item">
+            <t-icon name="heart" size="20rpx" color="#FF4757"></t-icon>
+            <text class="stat-text">{{item.likes}}</text>
+          </view>
+          <view class="stat-item">
+            <t-icon name="chat" size="20rpx" color="#666666"></t-icon>
+            <text class="stat-text">{{item.comments}}</text>
+          </view>
+          <text class="create-time">{{item.createTime}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="loading-more" wx:if="{{loading}}">
+      <t-loading theme="circular" size="40rpx" text="加载中..."></t-loading>
+    </view>
+
+    <!-- 没有更多数据 -->
+    <view class="no-more" wx:if="{{!hasMore && artworks.length > 0}}">
+      <text class="no-more-text">没有更多作品了</text>
+    </view>
+
+    <!-- 空状态 -->
+    <t-empty wx:if="{{!loading && artworks.length === 0}}" description="还没有作品，快去创作吧" icon="image">
+      <t-button theme="primary" size="medium" bind:tap="onCreateArtwork">开始创作</t-button>
+    </t-empty>
+  </scroll-view>
+</view>
+
+<!-- 自定义组件引用 -->
+<view class="custom-components">
+  <t-icon name="eye" size="24rpx" color="#ffffff"></t-icon>
+  <t-icon name="eye-closed" size="24rpx" color="#ffffff"></t-icon>
+  <t-icon name="share" size="24rpx" color="#ffffff"></t-icon>
+  <t-icon name="delete" size="24rpx" color="#ffffff"></t-icon>
+  <t-icon name="heart" size="24rpx" color="#FF4757"></t-icon>
+  <t-icon name="chat" size="24rpx" color="#666666"></t-icon>
+</view>

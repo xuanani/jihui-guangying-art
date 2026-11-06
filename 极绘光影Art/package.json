@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "tdesign-miniprogram": "^1.10.1"
+  },
+  "name": "jihui-guangying-art",
+  "version": "1.0.0",
+  "description": "极绘光影 · AI 画廊微信小程序（云开发 + 通义万相文生图）",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wechat",
+    "miniprogram",
+    "ai",
+    "text2image",
+    "tongyi-wanxiang",
+    "tdesign"
+  ],
+  "author": "xuanani (https://github.com/xuanani)",
+  "license": "MIT",
+  "homepage": "https://github.com/xuanani/jihui-guangying-art#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xuanani/jihui-guangying-art.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xuanani/jihui-guangying-art/issues"
+  }
+}

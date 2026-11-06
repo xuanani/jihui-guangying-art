@@ -1,0 +1,97 @@
+<!--pages/home/home.wxml-->
+<view class="home-container">
+  <!-- 顶部白色信息栏 -->
+  <view class="top-bar">
+    <view class="top-bar-content">
+      <text class="top-bar-title">AI艺术画廊</text>
+    </view>
+  </view>
+
+  <!-- 作品列表 -->
+  <scroll-view 
+    class="artwork-list" 
+    scroll-y="{{true}}" 
+    refresher-enabled="{{true}}"
+    refresher-triggered="{{refreshing}}"
+    bindrefresherrefresh="onPullDownRefresh"
+    bindscrolltolower="onReachBottom"
+  >
+    <view class="artwork-content">
+    <view class="artwork-item" wx:for="{{artworks}}" wx:key="id" bindtap="onViewArtwork" data-id="{{item.id}}">
+      <!-- 用户信息 -->
+      <view class="user-info">
+        <t-avatar 
+          image="{{item.user.avatar}}" 
+          size="60rpx"
+          bindtap="onViewUser" 
+          data-user-id="{{item.user.id}}"
+          catchtap="true"
+        ></t-avatar>
+        <view class="user-details">
+          <text class="username">{{item.user.nickname}}</text>
+          <text class="create-time">{{item.createTime}}</text>
+        </view>
+      </view>
+
+      <!-- 作品图片 -->
+      <t-image 
+        class="artwork-image"
+        src="{{item.image}}" 
+        mode="aspectFill"
+        shape="round"
+        radius="16rpx"
+        loading="lazy"
+      ></t-image>
+
+      <!-- 提示词 -->
+      <view class="prompt">
+        <text class="prompt-text">{{item.prompt}}</text>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="actions">
+        <view class="action-group">
+          <view 
+            class="action-item {{item.isLiked ? 'liked' : ''}}" 
+            bindtap="onLike" 
+            data-id="{{item.id}}"
+            catchtap="true"
+          >
+            <t-icon name="{{item.isLiked ? 'heart-filled' : 'heart'}}" size="32rpx" color="{{item.isLiked ? '#FF4757' : '#999999'}}"></t-icon>
+            <text class="action-text">{{item.likes}}</text>
+          </view>
+          
+          <view class="action-item" bindtap="onComment" data-id="{{item.id}}" catchtap="true">
+            <t-icon name="chat" size="32rpx" color="#999999"></t-icon>
+            <text class="action-text">{{item.comments}}</text>
+          </view>
+        </view>
+        
+        <view 
+          class="collect-btn {{item.isCollected ? 'collected' : ''}}" 
+          bindtap="onCollect" 
+          data-id="{{item.id}}"
+          catchtap="true"
+        >
+          <t-icon name="{{item.isCollected ? 'bookmark-filled' : 'bookmark'}}" size="32rpx" color="{{item.isCollected ? '#0052D9' : '#999999'}}"></t-icon>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="loading-more" wx:if="{{loading}}">
+      <t-loading theme="circular" size="40rpx" text="加载中..."></t-loading>
+    </view>
+
+    <!-- 没有更多数据 -->
+    <view class="no-more" wx:if="{{!hasMore && artworks.length > 0}}">
+      <text class="no-more-text">没有更多作品了</text>
+    </view>
+
+    <!-- 空状态 -->
+    <t-empty wx:if="{{!loading && artworks.length === 0}}" description="暂无作品" icon="image"></t-empty>
+    </view>
+  </scroll-view>
+
+
+</view>

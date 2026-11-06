@@ -1,0 +1,208 @@
+<!--pages/artwork-detail/artwork-detail.wxml-->
+<view class="detail-container">
+  <!-- 顶部白色信息栏 -->
+  <view class="top-bar">
+    <view class="top-bar-content">
+      <text class="top-bar-title">作品详情</text>
+    </view>
+  </view>
+  <!-- 作品图片 -->
+  <view class="image-section">
+    <t-image
+      class="artwork-image"
+      src="{{artwork.image}}"
+      mode="aspectFit"
+      shape="round"
+      radius="0"
+      loading="lazy"
+      bind:tap="onPreviewImage"
+    ></t-image>
+  </view>
+
+  <!-- 作品信息 -->
+  <view class="info-section">
+    <!-- 用户信息 -->
+    <view class="user-info" bind:tap="onViewUser">
+      <t-avatar
+        image="{{artwork.user.avatar}}"
+        size="80rpx"
+      ></t-avatar>
+      <view class="user-details">
+        <text class="username">{{artwork.user.nickname}}</text>
+        <text class="create-time">{{artwork.createTime}}</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <view 
+        class="action-item {{artwork.isLiked ? 'liked' : ''}}" 
+        bind:tap="onLike"
+      >
+        <t-icon 
+          name="{{artwork.isLiked ? 'heart-filled' : 'heart'}}" 
+          size="40rpx" 
+          color="{{artwork.isLiked ? '#FF4757' : '#999999'}}"
+        ></t-icon>
+        <text class="action-count">{{artwork.likes}}</text>
+      </view>
+      
+      <view 
+        class="action-item {{artwork.isCollected ? 'collected' : ''}}" 
+        bind:tap="onCollect"
+      >
+        <t-icon 
+          name="{{artwork.isCollected ? 'bookmark-filled' : 'bookmark'}}" 
+          size="40rpx" 
+          color="{{artwork.isCollected ? '#0052D9' : '#999999'}}"
+        ></t-icon>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提示词信息 -->
+  <view class="prompt-section">
+    <view class="section-header">
+      <text class="section-title">创作信息</text>
+      <t-button
+        theme="default"
+        size="small"
+        variant="outline"
+        bind:tap="onUsePrompt"
+      >
+        使用此提示词
+      </t-button>
+    </view>
+    
+    <view class="prompt-content">
+      <text class="prompt-label">提示词：</text>
+      <text class="prompt-text">{{artwork.prompt}}</text>
+    </view>
+    
+    <view class="negative-prompt" wx:if="{{artwork.negativePrompt}}">
+      <text class="prompt-label">负面提示词：</text>
+      <text class="prompt-text">{{artwork.negativePrompt}}</text>
+    </view>
+    
+    <!-- 标签 -->
+    <view class="tags" wx:if="{{artwork.tags.length > 0}}">
+      <t-tag
+        wx:for="{{artwork.tags}}"
+        wx:key="*this"
+        variant="light"
+        theme="primary"
+        size="small"
+        class="prompt-tag"
+      >
+        {{item}}
+      </t-tag>
+    </view>
+  </view>
+
+  <!-- 评论区域 -->
+  <view class="comments-section">
+    <view class="section-header" bind:tap="onViewComments">
+      <text class="section-title">评论 ({{artwork.comments}})</text>
+      <t-icon 
+        name="{{showComments ? 'chevron-up' : 'chevron-down'}}" 
+        size="24rpx" 
+        color="#999999"
+      ></t-icon>
+    </view>
+    
+    <!-- 评论列表 -->
+    <view class="comments-list" wx:if="{{showComments}}">
+      <view 
+        class="comment-item"
+        wx:for="{{comments}}"
+        wx:key="id"
+      >
+        <t-avatar
+          image="{{item.user.avatar}}"
+          size="60rpx"
+        ></t-avatar>
+        <view class="comment-content">
+          <view class="comment-header">
+            <text class="comment-user">{{item.user.nickname}}</text>
+            <text class="comment-time">{{item.createTime}}</text>
+          </view>
+          <text class="comment-text">{{item.content}}</text>
+          <view class="comment-actions">
+            <view 
+              class="comment-like {{item.isLiked ? 'liked' : ''}}"
+              bind:tap="onLikeComment"
+              data-id="{{item.id}}"
+            >
+              <t-icon 
+                name="{{item.isLiked ? 'heart-filled' : 'heart'}}" 
+                size="24rpx" 
+                color="{{item.isLiked ? '#FF4757' : '#999999'}}"
+              ></t-icon>
+              <text class="like-count">{{item.likes}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 添加评论 -->
+    <view class="add-comment" wx:if="{{showComments}}">
+      <t-input
+        class="comment-input"
+        value="{{commentInput}}"
+        placeholder="说点什么..."
+        maxlength="200"
+        bind:change="onCommentInput"
+      ></t-input>
+      <t-button
+        theme="primary"
+        size="small"
+        bind:tap="onAddComment"
+        disabled="{{!commentInput.trim()}}"
+      >
+        发送
+      </t-button>
+    </view>
+  </view>
+
+  <!-- 分享弹窗 -->
+  <t-popup
+    visible="{{showShare}}"
+    placement="bottom"
+    bind:visible-change="onShare"
+  >
+    <view class="share-popup">
+      <text class="share-title">分享作品</text>
+      <view class="share-options">
+        <view class="share-option" bind:tap="onShareToWeChat">
+          <t-icon name="wechat" size="48rpx" color="#07C160"></t-icon>
+          <text class="share-label">微信好友</text>
+        </view>
+        <view class="share-option" bind:tap="onShareToMoments">
+          <t-icon name="moments" size="48rpx" color="#07C160"></t-icon>
+          <text class="share-label">朋友圈</text>
+        </view>
+        <view class="share-option" bind:tap="copyLink">
+          <t-icon name="link" size="48rpx" color="#0052D9"></t-icon>
+          <text class="share-label">复制链接</text>
+        </view>
+      </view>
+    </view>
+  </t-popup>
+</view>
+
+<!-- 自定义组件引用 -->
+<view class="custom-components">
+  <t-icon name="download" size="24rpx" color="#ffffff"></t-icon>
+  <t-icon name="share" size="24rpx" color="#ffffff"></t-icon>
+  <t-icon name="more" size="24rpx" color="#ffffff"></t-icon>
+  <t-icon name="heart" size="24rpx" color="#999999"></t-icon>
+  <t-icon name="heart-filled" size="24rpx" color="#FF4757"></t-icon>
+  <t-icon name="bookmark" size="24rpx" color="#999999"></t-icon>
+  <t-icon name="bookmark-filled" size="24rpx" color="#0052D9"></t-icon>
+  <t-icon name="chevron-up" size="24rpx" color="#999999"></t-icon>
+  <t-icon name="chevron-down" size="24rpx" color="#999999"></t-icon>
+  <t-icon name="wechat" size="24rpx" color="#07C160"></t-icon>
+  <t-icon name="moments" size="24rpx" color="#07C160"></t-icon>
+  <t-icon name="link" size="24rpx" color="#0052D9"></t-icon>
+</view>
