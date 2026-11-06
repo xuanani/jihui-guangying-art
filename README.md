@@ -1,20 +1,12 @@
 # 极绘光影 · AI 画廊小程序
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![微信小程序](https://img.shields.io/badge/微信-小程序-07C160?logo=wechat\&logoColor=white) ![TDesign](https://img.shields.io/badge/UI-TDesign%20Miniprogram-0052D9)
 
-![微信小程序](https://img.shields.io/badge/微信-小程序-07C160?logo=wechat\&logoColor=white)
-
-
-
-![TDesign](https://img.shields.io/badge/UI-TDesign%20Miniprogram-0052D9)
-
-![通义万相](https://img.shields.io/badge/AI-通义万相-FF6A00)
-
-![Status](https://img.shields.io/badge/status-prototype-orange)
+![通义万相](https://img.shields.io/badge/AI-通义万相-FF6A00) ![Status](https://img.shields.io/badge/status-prototype-orange)
 
 > 一个基于「微信小程序 + 云开发 + 通义万相」的 AI 文生图小程序原型：写一句提示词，云端生成图片，直接在手机上查看。
 
-![界面原型](图片介绍.png)
+![界面原型](图片介绍.jpg)
 
 | 项目信息 | 说明                                                                      |
 | ---- | ----------------------------------------------------------------------- |
@@ -167,7 +159,7 @@ GitHub极绘光影/
 ├── LICENSE                       # MIT 许可证
 ├── THIRD-PARTY-NOTICES.md        # 第三方组件与素材声明
 ├── .gitignore                    # 忽略 .env / node_modules / 本地私有配置
-├── 图片介绍.png                   # 三屏界面原型图
+├── 图片介绍.jpg                   # 三屏界面原型图
 ├── design/requirement.md         # 产品需求文档（发布流程等尚未实现）
 └── 极绘光影Art/                   # 微信小程序工程根目录（用开发者工具导入这一层）
     ├── app.js                    # 云开发初始化、全局登录态、检查更新
@@ -562,7 +554,7 @@ const taskId = createResult.result.output.task_id
 需要说明的是，MIT 只覆盖**代码**：
 
 - 随仓库分发的 TDesign Miniprogram 组件（MIT，版权归 TDesign）及其他第三方依赖，见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)；
-- `图片介绍.png`、`icon/*.png`、`images/1.jpg` 等素材与「极绘光影」名称/标识不在授权范围内；
+- `图片介绍.jpg`、`icon/*.png`、`images/1.jpg` 等素材与「极绘光影」名称/标识不在授权范围内；
 - 通过通义万相生成的图片内容，其使用须遵守阿里云百炼的服务条款。
 
 ---

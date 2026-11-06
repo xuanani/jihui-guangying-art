@@ -34,7 +34,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## 素材与标识（不在代码许可范围内）
 
-- `图片介绍.png`：项目界面截图，仅用于说明项目。
+- `图片介绍.jpg`：项目界面截图，仅用于说明项目。
 - `极绘光影Art/icon/A.png` ~ `F.png`：tabBar 图标。
 - `极绘光影Art/images/1.jpg`：演示用图片。
 - 「极绘光影 / AI 画廊」名称与品牌标识：MIT 协议不授予商标权，请勿用于暗示官方背书。
